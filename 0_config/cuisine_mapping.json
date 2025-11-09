@@ -1,0 +1,38 @@
+{
+  "italian": [
+    "pizza", "lasagna", "risotto", "spaghetti_bolognese", 
+    "spaghetti_carbonara", "ravioli", "bruschetta", "tiramisu", 
+    "cannoli", "panna_cotta", "garlic_bread"
+  ],
+  "japanese": [
+    "sushi", "ramen", "sashimi", "takoyaki", "miso_soup", 
+    "gyoza", "edamame"
+  ],
+  "american": [
+    "hamburger", "hot_dog", "pancakes", "waffles", "apple_pie", 
+    "cheesecake", "macaroni_and_cheese", "grilled_cheese_sandwich", 
+    "pulled_pork_sandwich", "baby_back_ribs", "chicken_wings", 
+    "onion_rings", "club_sandwich", "eggs_benedict", "omelette", 
+    "lobster_roll_sandwich", "crab_cakes", "clam_chowder"
+  ],
+  "french": [
+    "french_fries", "french_onion_soup", "french_toast", 
+    "croque_madame", "escargots", "creme_brulee", "foie_gras", 
+    "macarons", "lobster_bisque", "mussels"
+  ],
+  "mexican": [
+    "tacos", "chicken_quesadilla", "nachos", "churros", 
+    "guacamole", "huevos_rancheros", "ceviche"
+  ],
+  "chinese": [
+    "dumplings", "fried_rice", "peking_duck", "hot_and_sour_soup", 
+    "spring_rolls"
+  ],
+  "mediterranean": [
+    "greek_salad", "hummus", "falafel", "baklava"
+  ],
+  "international": [
+    "grilled_salmon", "fried_calamari", "oysters", "scallops", 
+    "tuna_tartare", "paella", "fish_and_chips", "poutine", "pad_thai"
+  ]
+}
