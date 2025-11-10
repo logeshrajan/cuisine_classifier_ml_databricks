@@ -41,138 +41,109 @@ CUISINE_MAPPING_PATH = "/Volumes/cuisine_vision_catalog/config/config_volume/cui
 
 # Set page config
 st.set_page_config(
-    page_title="🍽️ Cuisine Classifier",
-    page_icon="🍽️",
+    page_title="Cuisine Classifier",
+    page_icon="",
     layout="wide",  # Changed to wide for better modern layout
     initial_sidebar_state="collapsed"  # Start with clean main view
 )
 
-# Custom CSS for modern, professional styling
+# Custom CSS for ultra-compact styling
 st.markdown("""
 <style>
     .main-container {
-        max-width: 1200px;
+        max-width: 1400px;
         margin: 0 auto;
-        padding: 2rem;
+        padding: 0.2rem;
     }
     
     .hero-section {
         text-align: center;
-        padding: 3rem 2rem;
+        padding: 0.8rem 1rem;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 20px;
+        border-radius: 10px;
         color: white;
-        margin-bottom: 3rem;
+        margin-bottom: 0.8rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
     
     .hero-title {
-        font-size: 3.5rem;
+        font-size: 1.8rem;
         font-weight: bold;
-        margin-bottom: 1rem;
+        margin-bottom: 0.3rem;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
     
     .hero-subtitle {
-        font-size: 1.3rem;
-        opacity: 0.9;
-        margin-bottom: 0.5rem;
-    }
-    
-    .upload-zone {
-        background: #f8fafc;
-        border: 2px dashed #e2e8f0;
-        border-radius: 15px;
-        padding: 2rem;
-        text-align: center;
-        margin: 2rem 0;
-        transition: all 0.3s ease;
-    }
-    
-    .upload-zone:hover {
-        border-color: #667eea;
-        background: #f1f5f9;
-    }
-    
-    .prediction-card {
-        background: white;
-        border-radius: 20px;
-        padding: 2rem;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        margin: 2rem 0;
-        border: 1px solid #e2e8f0;
+        font-size: 0.9rem;
+        opacity: 0.95;
+        margin: 0;
     }
     
     .result-cuisine {
-        font-size: 3rem;
+        font-size: 1.5rem;
         font-weight: bold;
         text-align: center;
-        margin: 1.5rem 0;
+        margin: 0.5rem 0;
         color: #1a202c;
     }
     
     .confidence-badge {
         display: inline-block;
-        padding: 0.8rem 1.5rem;
-        border-radius: 50px;
-        font-weight: bold;
-        font-size: 1.1rem;
-        margin: 1rem 0;
-    }
-    
-    .confidence-high {
-        background: #10b981;
-        color: white;
-    }
-    
-    .confidence-medium {
-        background: #f59e0b;
-        color: white;
-    }
-    
-    .confidence-low {
-        background: #ef4444;
-        color: white;
-    }
-    
-    .image-preview {
+        padding: 0.3rem 0.6rem;
         border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        margin: 1rem 0;
+        font-weight: bold;
+        font-size: 0.75rem;
+        margin: 0.3rem 0;
     }
     
-    .cuisine-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-        margin: 2rem 0;
-    }
+    .confidence-high { background: #10b981; color: white; }
+    .confidence-medium { background: #f59e0b; color: white; }
+    .confidence-low { background: #ef4444; color: white; }
     
     .cuisine-item {
-        background: white;
-        padding: 1rem;
-        border-radius: 10px;
-        border-left: 4px solid #667eea;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        background: #f8f9fa;
+        padding: 0.3rem;
+        border-radius: 4px;
+        border-left: 2px solid #667eea;
+        font-size: 0.65rem;
+        margin: 0.1rem 0;
     }
     
-    .status-indicator {
-        display: inline-flex;
-        align-items: center;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        font-size: 0.9rem;
-        font-weight: 500;
+    .stButton > button {
+        height: 2rem;
+        font-size: 0.8rem;
     }
     
-    .status-connected {
-        background: #dcfce7;
-        color: #166534;
+    /* Hide image expand button */
+    button[title="View fullscreen"] {
+        display: none !important;
     }
     
-    .status-error {
-        background: #fef2f2;
-        color: #991b1b;
+    .stImage > div > div > div > button {
+        display: none !important;
+    }
+    
+    .stImage button[kind="secondary"] {
+        display: none !important;
+    }
+    
+    /* Hide any expand icons on images */
+    .stImage [data-testid="baseButton-secondary"] {
+        display: none !important;
+    }
+    
+    h1, h2, h3 {
+        margin: 0.3rem 0 !important;
+        font-size: 1rem !important;
+    }
+    
+    .stApp > div:first-child {
+        padding-top: 0.5rem !important;
+    }
+    
+    .main .block-container {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -181,10 +152,7 @@ st.markdown("""
 st.markdown("""
 <div class="hero-section">
     <div class="hero-title">🍽️ AI Cuisine Classifier</div>
-    <div class="hero-subtitle">Discover the cuisine of any dish with advanced AI technology</div>
-    <div style="opacity: 0.8; font-size: 1rem; margin-top: 1rem;">
-        Powered by Databricks Model Serving & Streamlit
-    </div>
+    <div class="hero-subtitle">Upload a food image to identify its cuisine type with AI precision</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -417,60 +385,100 @@ if not st.session_state.endpoint_tested:
 # Show connection status at top of main content
 status_text = st.session_state.get('connection_status', 'Checking...')
 if 'Connected' in status_text:
-    st.success(f"� AI Model {status_text}")
+    st.success(f"{status_text} to `cuisine_classifier` model")
 else:
     st.error(f"🔴 {status_text}")
 
-# Main upload area with modern design
-uploaded_file = st.file_uploader(
-    "",
-    type=['jpg', 'jpeg', 'png'],
-    help="Upload JPG, JPEG, or PNG files up to 200MB",
-    label_visibility="collapsed"
-)
+# Enhanced upload area with custom styling
+st.markdown("""
+<style>
+.upload-zone {
+    background: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 100%);
+    border: 2px dashed #667eea;
+    border-radius: 15px;
+    padding: 1.5rem;
+    text-align: center;
+    margin: 1rem 0;
+    transition: all 0.3s ease;
+}
+.upload-zone:hover {
+    border-color: #4f46e5;
+    background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
+    transform: translateY(-2px);
+}
+</style>
+""", unsafe_allow_html=True)
+
+# Main upload area with modern design - only show if no file uploaded
+if 'uploaded_file' not in st.session_state:
+    st.session_state.uploaded_file = None
+if 'upload_key' not in st.session_state:
+    st.session_state.upload_key = 0
+
+# Only show uploader if no file is currently uploaded
+if st.session_state.uploaded_file is None:
+    # Create container to force refresh
+    upload_container = st.container()
+    with upload_container:
+        uploaded_file = st.file_uploader(
+            "Drag and drop your food image here",
+            type=['jpg', 'jpeg', 'png'],
+            help="Upload JPG, JPEG, or PNG files up to 200MB",
+            label_visibility="visible",
+            key=f"file_uploader_{st.session_state.upload_key}"
+        )
+    if uploaded_file is not None:
+        st.session_state.uploaded_file = uploaded_file
+        st.rerun()
+else:
+    uploaded_file = st.session_state.uploaded_file
 
 if uploaded_file is not None:
     try:
         image = Image.open(uploaded_file)
         
-        # Modern two-section layout
-        st.markdown("---")
+        # Compact side-by-side layout: Image left, Results right
+        col1, col2 = st.columns([1, 1.5])
         
-        # Image section
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            st.markdown('<div class="image-preview">', unsafe_allow_html=True)
-            st.image(image, use_column_width=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+        with col1:
+            st.markdown("**📸 Uploaded Image**")
+            # Reduce image display to max width 180px for more compact view
+            st.image(image, width=180)
             st.caption(f"📁 {uploaded_file.name}")
+            
+            # Add option to upload new image
+            if st.button("📷 Upload New Image", type="secondary"):
+                # Clear the uploaded file from session state
+                st.session_state.uploaded_file = None
+                # Increment key to force new uploader
+                st.session_state.upload_key += 1
+                st.rerun()
         
-        # Prediction section
-        st.markdown('<div class="prediction-card">', unsafe_allow_html=True)
-        
-        # Centered predict button
-        col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
-            if st.button("� Analyze Cuisine", type="primary", use_container_width=True):
-                with st.spinner("� AI is analyzing your dish..."):
+            st.markdown("**🎯 Analysis Results**")
+            
+            # Compact predict button
+            if st.button("🚀 Analyze Cuisine", type="primary", use_container_width=True):
+                with st.spinner("🤖 Analyzing..."):
                     result = predict_cuisine_via_endpoint(image)
                     
                     if result['cuisine'] not in ['Error', 'Timeout', 'Connection Error']:
                         confidence_pct = result['confidence'] * 100
                         
-                        # Modern results display
+                        # Compact results display
                         st.markdown(f'<div class="result-cuisine">{result["cuisine"].title()}</div>', 
                                   unsafe_allow_html=True)
                         
-                        # Confidence badge with proper styling
+                        # Compact confidence badge
                         if confidence_pct >= 70:
                             badge_class = "confidence-high"
-                            confidence_text = f"{confidence_pct:.1f}% Confidence - Excellent"
+                            confidence_text = f"{confidence_pct:.1f}% - Excellent"
                         elif confidence_pct >= 50:
                             badge_class = "confidence-medium" 
-                            confidence_text = f"{confidence_pct:.1f}% Confidence - Good"
+                            confidence_text = f"{confidence_pct:.1f}% - Good"
                         else:
                             badge_class = "confidence-low"
-                            confidence_text = f"{confidence_pct:.1f}% Confidence - Uncertain"
+                            confidence_text = f"{confidence_pct:.1f}% - Uncertain"
                         
                         st.markdown(f"""
                         <div style="text-align: center;">
@@ -478,66 +486,33 @@ if uploaded_file is not None:
                         </div>
                         """, unsafe_allow_html=True)
                         
-                        # Modern progress bar
+                        # Compact progress bar
                         st.progress(result['confidence'])
-                        
-                        # Success message
-                        if confidence_pct >= 80:
-                            st.success("🎉 This looks like a perfect match!")
-                        elif confidence_pct >= 60:
-                            st.info("👍 Good prediction with solid confidence")
-                        else:
-                            st.warning("🤔 The AI is uncertain. Try a clearer image for better results.")
                     else:
                         st.error(f"❌ Analysis failed: {result['cuisine']}")
-                        st.info("💡 Please check your connection and try again")
         
-        st.markdown('</div>', unsafe_allow_html=True)  # Close prediction card
-                    
     except Exception as e:
-        st.error(f"❌ Error processing image: {str(e)}")
-        st.info("💡 Please try uploading a different image")
+        st.error(f"❌ Error: {str(e)}")
 
-# Cuisine Guide Section
-st.markdown("---")
-st.markdown("## 🗺️ Supported Cuisines & Examples")
+# Compact Cuisine Guide Section  
+st.markdown("### Cuisine - Food Type Mapping")
 
-# Create cuisine grid
-cuisine_items = list(cuisine_mapping.items())
-cols = st.columns(4)
+# Ultra-compact cuisine grid
+cols = st.columns(8)
 
-for idx, (cuisine, foods) in enumerate(cuisine_items):
-    col_idx = idx % 4
+for idx, (cuisine, foods) in enumerate(cuisine_mapping.items()):
+    col_idx = idx % 8
     with cols[col_idx]:
+        # Show all foods in each cuisine
+        food_list = "".join([f"• {food}<br>" for food in foods[:4]])  # Show max 4 items to keep compact
         st.markdown(f"""
         <div class="cuisine-item">
-            <h4>{cuisine.title()}</h4>
-            <ul>
+            <strong style="font-size: 0.7rem;">{cuisine.title()}</strong>
+            <div style="font-size: 0.6rem; margin-top: 0.1rem; line-height: 1.2;">
+                {food_list}
+            </div>
+        </div>
         """, unsafe_allow_html=True)
-        for food in foods[:3]:  # Show only first 3 foods
-            st.markdown(f"• {food.title()}")
-        st.markdown("</div>", unsafe_allow_html=True)
 
 # Close main container
 st.markdown('</div>', unsafe_allow_html=True)
-
-# ============================================================================
-# FOOTER
-# ============================================================================
-
-st.markdown("---")
-st.markdown("""
-<div style="text-align: center; padding: 2rem; color: #666;">
-    <div style="margin-bottom: 1rem;">
-        <strong>🎯 How It Works</strong><br>
-        Upload → AI Analysis → Instant Results
-    </div>
-    <div style="margin-bottom: 1rem;">
-        <strong>🔧 Technology</strong><br>
-        Databricks Model Serving • Advanced Computer Vision • Real-time Predictions
-    </div>
-    <div style="font-size: 0.9rem; opacity: 0.7;">
-        Powered by Databricks Model Serving & Streamlit
-    </div>
-</div>
-""", unsafe_allow_html=True)
