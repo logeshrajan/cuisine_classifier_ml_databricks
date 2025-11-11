@@ -26,7 +26,7 @@ SERVING_ENDPOINT_URL = "https://adb-2867553723712000.0.azuredatabricks.net/servi
 
 # Authentication - you'll need to set this up
 # Option 1: Personal Access Token (for development)
-DATABRICKS_TOKEN = 'token'  # Replace with your token
+# DATABRICKS_TOKEN = None
 
 # Cuisine Mapping Configuration
 CUISINE_MAPPING_PATH = "/Volumes/cuisine_vision_catalog/config/config_volume/cuisine_mapping.json"
@@ -247,7 +247,7 @@ def predict_cuisine_via_endpoint(image):
         
         # Headers for authentication
         headers = {
-            "Authorization": f"Bearer {DATABRICKS_TOKEN[:10]}***",  # Log only first 10 chars for security
+            # "Authorization": f"Bearer {DATABRICKS_TOKEN[:10]}***",  # Log only first 10 chars for security
             "Content-Type": "application/json"
         }
         logger.info("🔄 Making request to serving endpoint...")
@@ -257,7 +257,7 @@ def predict_cuisine_via_endpoint(image):
         response = requests.request(
             method='POST',
             headers={
-                "Authorization": f"Bearer {DATABRICKS_TOKEN}",
+                # "Authorization": f"Bearer {DATABRICKS_TOKEN}",
                 "Content-Type": "application/json"
             },
             url=SERVING_ENDPOINT_URL,
@@ -289,6 +289,8 @@ def predict_cuisine_via_endpoint(image):
                 'cuisine': prediction.get('label', 'Unknown'),
                 'confidence': prediction.get('score', 0.0)
             }
+            if final_result["confidence"] <= 0.3:
+                final_result["cuisine"] = 'Not a food / Unknown image data'
             logger.info(f"🎯 Final prediction: {final_result}")
             return final_result
             
@@ -331,7 +333,7 @@ def test_endpoint_connection():
         logger.info("🔄 Testing serving endpoint connection...")
         
         headers = {
-            "Authorization": f"Bearer {DATABRICKS_TOKEN}",
+            # "Authorization": f"Bearer {DATABRICKS_TOKEN}",
             "Content-Type": "application/json"
         }
         
@@ -350,14 +352,13 @@ def test_endpoint_connection():
             timeout=10
         )
         
-        is_reachable = response.status_code in [200, 400]  # 400 is ok for empty payload
+        is_reachable = response.status_code == 200  # Only 200 is success
         
         if is_reachable:
             logger.info(f"✅ Endpoint is reachable. Status: {response.status_code}")
         else:
             logger.warning(f"⚠️ Endpoint returned status {response.status_code}: {response.text}")
-        
-        return is_reachable
+        return response
         
     except Exception as e:
         logger.error(f"❌ Failed to connect to endpoint: {str(e)}")
@@ -376,18 +377,22 @@ if 'endpoint_tested' not in st.session_state:
 
 if not st.session_state.endpoint_tested:
     with st.spinner("🔄 Testing connection..."):
-        if test_endpoint_connection():
+        response = test_endpoint_connection()
+        res_code = response.status_code
+        if res_code == 200:
             st.session_state.connection_status = "✅ Connected"
         else:
-            st.session_state.connection_status = "❌ Connection Error"
+            # parse the response and fetch the error message
+            err_msg = response.json().get('message', 'Unknown error')
+            st.session_state.connection_status = err_msg  # "❌ Connection Error"
     st.session_state.endpoint_tested = True
 
 # Show connection status at top of main content
 status_text = st.session_state.get('connection_status', 'Checking...')
 if 'Connected' in status_text:
-    st.success(f"{status_text} to `cuisine_classifier` model")
+    st.success(f"{status_text} to 'cuisine_classifier' model")
 else:
-    st.error(f"🔴 {status_text}")
+    st.error(f"❌ Unable to connect to 'cuisine_classifier' model: {status_text}")
 
 # Enhanced upload area with custom styling
 st.markdown("""
