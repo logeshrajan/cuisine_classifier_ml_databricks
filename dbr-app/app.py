@@ -358,7 +358,8 @@ def test_endpoint_connection():
             logger.info(f"✅ Endpoint is reachable. Status: {response.status_code}")
         else:
             logger.warning(f"⚠️ Endpoint returned status {response.status_code}: {response.text}")
-        return response
+
+        return is_reachable
         
     except Exception as e:
         logger.error(f"❌ Failed to connect to endpoint: {str(e)}")
@@ -377,14 +378,13 @@ if 'endpoint_tested' not in st.session_state:
 
 if not st.session_state.endpoint_tested:
     with st.spinner("🔄 Testing connection..."):
-        response = test_endpoint_connection()
-        res_code = response.status_code
-        if res_code == 200:
+        is_reachable = test_endpoint_connection()
+        if is_reachable:
             st.session_state.connection_status = "✅ Connected"
         else:
             # parse the response and fetch the error message
-            err_msg = response.json().get('message', 'Unknown error')
-            st.session_state.connection_status = err_msg  # "❌ Connection Error"
+            # err_msg = response.json().get('message', 'Unknown error')
+            st.session_state.connection_status = "❌ Connection Error"
     st.session_state.endpoint_tested = True
 
 # Show connection status at top of main content
