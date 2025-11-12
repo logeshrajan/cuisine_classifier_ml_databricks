@@ -7,7 +7,10 @@ import io
 import base64
 import json
 import logging
+import os
+from dotenv import load_dotenv 
 
+load_dotenv()
 # ============================================================================
 # LOGGING CONFIGURATION
 # ============================================================================
@@ -21,15 +24,16 @@ logger = logging.getLogger(__name__)
 # ============================================================================
 
 # Serving Endpoint Configuration
-SERVING_ENDPOINT_URL = "https://adb-2867553723712000.0.azuredatabricks.net/serving-endpoints/cuisine-classifier/invocations"
+SERVING_ENDPOINT_URL = os.environ.get("SERVING_ENDPOINT_URL")
+print(SERVING_ENDPOINT_URL)
 # Your actual endpoint URL from Databricks
 
 # Authentication - you'll need to set this up
 # Option 1: Personal Access Token (for development)
-# DATABRICKS_TOKEN = None
+DATABRICKS_TOKEN = os.environ.get('DATABRICKS_TOKEN', None)
 
 # Cuisine Mapping Configuration
-CUISINE_MAPPING_PATH = "/Volumes/cuisine_vision_catalog/config/config_volume/cuisine_mapping.json"
+CUISINE_MAPPING_PATH = os.environ.get("CUISINE_MAPPING_PATH")
 
 # Option 2: Service Principal (for production) - commented out
 # CLIENT_ID = "your-service-principal-client-id"
@@ -247,7 +251,7 @@ def predict_cuisine_via_endpoint(image):
         
         # Headers for authentication
         headers = {
-            # "Authorization": f"Bearer {DATABRICKS_TOKEN[:10]}***",  # Log only first 10 chars for security
+            "Authorization": f"Bearer {DATABRICKS_TOKEN[:10]}***",  # Log only first 10 chars for security
             "Content-Type": "application/json"
         }
         logger.info("🔄 Making request to serving endpoint...")
@@ -257,12 +261,12 @@ def predict_cuisine_via_endpoint(image):
         response = requests.request(
             method='POST',
             headers={
-                # "Authorization": f"Bearer {DATABRICKS_TOKEN}",
+                "Authorization": f"Bearer {DATABRICKS_TOKEN}",
                 "Content-Type": "application/json"
             },
             url=SERVING_ENDPOINT_URL,
             data=data_json,
-            timeout=30
+            timeout=60
         )
         
         logger.info(f"📡 Response status: {response.status_code}")
@@ -333,7 +337,7 @@ def test_endpoint_connection():
         logger.info("🔄 Testing serving endpoint connection...")
         
         headers = {
-            # "Authorization": f"Bearer {DATABRICKS_TOKEN}",
+            "Authorization": f"Bearer {DATABRICKS_TOKEN}",
             "Content-Type": "application/json"
         }
         
@@ -349,7 +353,7 @@ def test_endpoint_connection():
             headers=headers,
             url=SERVING_ENDPOINT_URL,
             data=data_json,
-            timeout=10
+            timeout=30
         )
         
         is_reachable = response.status_code == 200  # Only 200 is success

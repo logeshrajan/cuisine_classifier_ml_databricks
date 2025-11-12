@@ -1,0 +1,8 @@
+command: ['streamlit', 'run', 'app.py']
+env:
+  - name: 'DATABRICKS_TOKEN'
+    value: 'your-databricks-token'
+  - name: "CUISINE_MAPPING_PATH"
+    value: "/Volumes/cuisine_vision_catalog/config/config_volume/cuisine_mapping.json"
+  - name: "SERVING_ENDPOINT_URL"
+    value: "https://adb-2867553723712000.0.azuredatabricks.net/serving-endpoints/cuisine-classifier/invocations"
