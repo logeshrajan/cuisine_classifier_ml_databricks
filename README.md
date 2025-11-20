@@ -279,6 +279,8 @@ Current ResNet-50 model metrics (based on training pipeline):
 
 ## 📈 Complete Data Flow
 
+![Data Flow Diagram](Data%20flow%20diagram.png)
+
 ```mermaid
 graph TD
     A[Hugging Face Food-101] -->|Stream Download| B[Bronze Volume Storage]
